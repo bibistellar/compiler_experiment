@@ -1,90 +1,55 @@
-TYPE -> KEY_CHAR
-DEF_VALUE -> TYPE ID
-VAL_LOC -> VALUE_INT
-B -> VAL_LOC
-A -> B
-Exp -> A
-DEF_VALUE -> DEF_VALUE = Exp
-P -> DEF_VALUE #END
-TYPE -> KEY_INT
-TYPE -> KEY_INT
-DEF_VAL_LIST -> TYPE ID
-TYPE -> KEY_INT
-DEF_VAL_LIST -> DEF_VAL_LIST SEP_COMMA TYPE ID
-TYPE -> KEY_INT
-DEF_VAL_LIST -> DEF_VAL_LIST SEP_COMMA TYPE ID
-TYPE -> KEY_INT
-DEF_VALUE -> TYPE ID
-B -> ID
-A -> B
-Exp -> A
-OP_LOW -> +
-B -> ID
-A -> B
-Exp -> Exp OP_LOW A
-OP_LOW -> +
-B -> ID
-A -> B
-Exp -> Exp OP_LOW A
-DEF_VALUE -> DEF_VALUE = Exp
-S -> DEF_VALUE
-RETURN -> KEY_RETURN ID
-S -> RETURN
-MS -> S #END
-MS -> S #END MS
-DEF_FUNC -> TYPE ID ( DEF_VAL_LIST ) { MS }
-P -> P DEF_FUNC
 TYPE -> KEY_INT
 TYPE -> KEY_INT
 DEF_VALUE -> TYPE ID
 S -> DEF_VALUE
-TYPE -> KEY_INT
-DEF_VALUE -> TYPE ID
-S -> DEF_VALUE
 VAL_LOC -> VALUE_INT
 B -> VAL_LOC
-A -> B
-Exp -> A
-S -> ID = Exp
-VAL_LOC -> VALUE_INT
-B -> VAL_LOC
-A -> B
-Exp -> A
-S -> ID = Exp
-VAL_LOC -> VALUE_INT
-B -> VAL_LOC
-A -> B
-Exp -> A
-S -> ID = Exp
-B -> ID
 A -> B
 OP_HIGH -> *
-B -> ID
+VAL_LOC -> VALUE_INT
+B -> VAL_LOC
 A -> A OP_HIGH B
 Exp -> A
 OP_LOW -> +
+VAL_LOC -> VALUE_INT
+B -> VAL_LOC
+A -> B
+OP_HIGH -> *
+VAL_LOC -> VALUE_INT
+B -> VAL_LOC
+A -> A OP_HIGH B
+Exp -> Exp OP_LOW A
+S -> ID = Exp
 B -> ID
 A -> B
 Exp -> A
 OP_LOW -> -
-B -> ID
-A -> B
-Exp -> Exp OP_LOW A
-B -> ( Exp )
-A -> B
-Exp -> Exp OP_LOW A
-OP_LOW -> +
-B -> ID
+VAL_LOC -> VALUE_INT
+B -> VAL_LOC
 A -> B
 Exp -> Exp OP_LOW A
 S -> ID = Exp
-VAL_LOC -> VALUE_STRING
-VAL_LIST -> VAL_LOC
-S -> ID ( VAL_LIST )
-VAL_LIST -> ID
-VAL_LIST -> VAL_LIST SEP_COMMA ID
-VAL_LIST -> VAL_LIST SEP_COMMA ID
-S -> ID ( VAL_LIST )
+B -> ID
+A -> B
+OP_HIGH -> /
+VAL_LOC -> VALUE_INT
+B -> VAL_LOC
+A -> A OP_HIGH B
+Exp -> A
+S -> ID = Exp
+VAL_LOC -> VALUE_INT
+B -> VAL_LOC
+A -> B
+OP_HIGH -> /
+B -> ID
+A -> A OP_HIGH B
+Exp -> A
+OP_LOW -> +
+VAL_LOC -> VALUE_INT
+B -> VAL_LOC
+A -> B
+Exp -> Exp OP_LOW A
+S -> ID = Exp
 VAL_LOC -> VALUE_INT
 RETURN -> KEY_RETURN VAL_LOC
 S -> RETURN
@@ -94,9 +59,6 @@ MS -> S #END MS
 MS -> S #END MS
 MS -> S #END MS
 MS -> S #END MS
-MS -> S #END MS
-MS -> S #END MS
-MS -> S #END MS
 DEF_FUNC -> TYPE ID ( ) { MS }
-P -> P DEF_FUNC
+P -> DEF_FUNC
 Accept!

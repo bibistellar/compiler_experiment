@@ -1,0 +1,36 @@
+SDT说明：
+    每条语句定义前面的括号指示了该语句定义在文法.txt中的起始行数。
+
+//定义变量
+(45)DEF_VALUE -> TYPE ID {
+    enter(ID,TYPE.type,offset);
+    offset = offset+TYPE.width;
+    p = loockup(ID.name);
+    if(p==null) error;
+    ID.type = D.type;
+}
+
+(83)TYPE -> KEY_INT{
+    TYPE.type = KEY_INT.name;
+}
+
+
+(48)S -> ID = Exp{
+    p = lookup(ID.name);
+    if(null) error;
+    gencode(p,'=',Exp.addr);
+}//'='表示输入的是OP_ASSIGN 
+
+(80)OP_LOW -> +{
+    OP_LOW.op = +;
+}
+
+(80)OP_LOW -> -{
+    OP_LOW.op = -;
+}
+
+(75)Exp -> Exp OP_LOW A{
+    newExp.addr = newtemp();
+    op = OP_LOW.op;
+    gencode(newExp.addr,'=',Exp.addr,op,A.addr);
+}

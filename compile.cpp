@@ -23,6 +23,6 @@ int main(){
 
     analysis_table(LR_path,token_path,produce_path);
 
-    cout<<("yntax analysis has completed!")<<endl;
+    cout<<("syntax analysis has completed!")<<endl;
     return 0;
 }

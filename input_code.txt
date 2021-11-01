@@ -1,17 +1,8 @@
-char A = 4;
-int function2 (int a,int b,int c){
-	int result = a + b + c;
-	return result;
-}
-
 int function(){
 	int result;
-	int a;
-	a = 8;
-	b = 5;
-	c = 3;
-	result= a * b + ( a - b ) + c;
-	printf("test this mini conpiler!");
-	function(a,b,c);
+	f = 2*10+2*4;
+	c = f-2;
+	d = c/10;
+	a = 10/d+3;
 	return 0;
 }
