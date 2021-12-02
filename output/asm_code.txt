@@ -1,0 +1,43 @@
+.data
+hello: .4byte 0
+temp: .4byte 0
+A: .4byte 0
+.4byte 0
+.4byte 0
+.4byte 0
+.4byte 0
+.4byte 0
+.4byte 0
+.4byte 0
+.4byte 0
+
+.text
+main:
+addi x5,x0,5
+addi x6,x0,5
+add  x7,x5,x6
+sw   x7,12(x0)
+lw   x5,12(x0)
+addi x6,x0,5
+add  x7,x5,x6
+sw   x7,16(x0)
+lw   x5,8(x0)
+addi x6,x0,5
+sub  x7,x5,x6
+sw   x7,20(x0)
+addi x5,x0,11
+addi x6,x0,6
+sub  x7,x5,x6
+sw   x7,24(x0)
+lw   x5,8(x0)
+addi x6,x0,3
+mul  x7,x5,x6
+sw   x7,28(x0)
+addi x5,x0,5
+addi x6,x0,4
+add  x7,x5,x6
+sw   x7,36(x0)
+lw   x5,32(x0)
+lw   x6,36(x0)
+add  x7,x5,x6
+sw   x7,40(x0)

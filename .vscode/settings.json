@@ -7,6 +7,11 @@
         "vector": "cpp",
         "string_view": "cpp",
         "initializer_list": "cpp",
-        "iosfwd": "cpp"
+        "iosfwd": "cpp",
+        "*.tcc": "cpp",
+        "ostream": "cpp",
+        "fstream": "cpp",
+        "iostream": "cpp",
+        "typeinfo": "cpp"
     }
 }

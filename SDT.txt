@@ -1,13 +1,31 @@
 SDT说明：
     每条语句定义前面的括号指示了该语句定义在文法.txt中的起始行数。
 
-//定义变量
+//函数定义
+(27)DEF_FUNC -> TYPE ID () { MS }{
+    new_symbol_table = create_symbol_table(ID.name);
+    enter(new_symbol_table);
+    cur_symbol_table.child = new_symbol_table;
+}
+"FUNC_START -> TYPE ID ( DEF_VAL_LIST ) {" {
+    new_symbol_table = create_symbol_table(ID.name);
+    enter(new_symbol_table);
+    cur_symbol_table.child = new_symbol_table;
+}
+"FUNC_START -> TYPE ID ( ) {" {
+    new_symbol_table = create_symbol_table(ID.name);
+    enter(new_symbol_table);
+    cur_symbol_table.child = new_symbol_table;
+}
+
+
+
+//声明语句翻译 
 (45)DEF_VALUE -> TYPE ID {
     enter(ID,TYPE.type,offset);
     offset = offset+TYPE.width;
     p = loockup(ID.name);
     if(p==null) error;
-    ID.type = D.type;
 }
 
 (83)TYPE -> KEY_INT{
@@ -15,22 +33,71 @@ SDT说明：
 }
 
 
+//赋值语句
 (48)S -> ID = Exp{
     p = lookup(ID.name);
     if(null) error;
-    gencode(p,'=',Exp.addr);
+    gencode('=',"Assign",p,Exp.addr," "," ");
 }//'='表示输入的是OP_ASSIGN 
-
-(80)OP_LOW -> +{
-    OP_LOW.op = +;
-}
-
-(80)OP_LOW -> -{
-    OP_LOW.op = -;
-}
 
 (75)Exp -> Exp OP_LOW A{
     newExp.addr = newtemp();
-    op = OP_LOW.op;
-    gencode(newExp.addr,'=',Exp.addr,op,A.addr);
+    op = OP_LOW.name;
+    gencode('=',op,Exp.addr,A.addr,newExp.addr);
+}
+
+(75)Exp -> A{
+    Exp.val = A.val;
+    Exp.addr = A.addr;
+}
+
+(76) A -> B{
+    A.val = B.val;
+    A.addr = B.addr;
+}
+
+(76) A -> A OP_HIGH B{
+    A1.val = A2.val OP_HIGH B.val;
+    A1.addr = newtemp();
+    op=OP_HIGH.name;
+    gencode('=',op,A2.addr,B.addr,A1.addr);
+
+}
+
+(77) B -> VAL_LOC{
+    B.val = VAL_LOC.val;
+    B.addr = -1;//不需要计算的变量直接赋值,地址为-1
+}
+
+(77) B -> ( Exp ){
+    B.val = Exp.val;
+    B.addr = Exp.addr;
+}
+
+(77) B -> ID{
+    p = lookup(ID.name);
+    if(!p) error;
+    get_symbol(ID.name);
+    B.val = ID.val;
+    B.addr = p;
+}
+
+(78)VAL_LOC -> VALUE_INT{
+    VAL_LOC.val = VALUE_INT.name;
+}
+
+(80)OP_LOW -> +{
+    OP_LOW.name = '+';
+}
+
+(80)OP_LOW -> -{
+    OP_LOW.name = '-';
+}
+
+(81)OP_HIGH -> *{
+    OP_HIGH.name = "*";
+}
+
+(81)OP_HIGH -> /{
+    OP_HIGH.name = "/";
 }

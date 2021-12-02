@@ -1,11 +1,18 @@
+#include <iostream>
+#include <string>
+#include <map>
+#include <fstream>
+#include <stack>
+#include <cstring>
 #include "define.h"
 
 using namespace std;
 
+//状态分析栈节点
 typedef struct state_and_word
 {
     int state;
-    int type_code;
+    int syntax_code;
     int lex_code;
 } SC;
 
@@ -33,7 +40,7 @@ private:
     map<int, string> code_VT;//允许根据编号找到终结和非终结字符
 
 public:
-    int create(ifstream &f_LR)
+    int create(fstream &f_LR)
     {
         char buf[1024];
         char temp[1024];
@@ -219,6 +226,14 @@ public:
                 return VT.at("KEY_CHAR");
                 break;
             }
+            case(KEY_IF):{
+                return VT.at("KEY_IF");
+                break;
+            }
+            case(KEY_ELSE):{
+                return VT.at("KEY_ELSE");
+                break;
+            }
             case(KEY_RETURN):{
                 return VT.at("KEY_RETURN");
                 break;
@@ -288,19 +303,24 @@ public:
     int pro_left_code(int x,int y){
         return prod.at(action[x][y].PNO).left_type_code;
     }
-    int write_produce(ofstream& f_produce,int x,int y){
+    //将动作表中被指定的格子中的产生式写入文件中,同时返回该产生式的字符串
+    string write_produce(fstream& f_produce,int x,int y){
+        string production;
         f_produce<<(code_VT.at(prod[action[x][y].PNO].left_type_code));
+        production = code_VT.at(prod[action[x][y].PNO].left_type_code) + " ->";
         f_produce << " ->";
         for(int i = 0;i < prod[action[x][y].PNO].production.length();i++){
             if(prod[action[x][y].PNO].production[i] == '?'){
                 f_produce << ' ';
+                production = production + ' ';
             }
             else{
                 f_produce << prod[action[x][y].PNO].production[i];
+                production = production + prod[action[x][y].PNO].production[i];
             }
         }
         f_produce << endl;
-        return 0;
+        return production;
     }
     int prod_has_in(PROD prod_temp){
         for(map<int,PROD>::iterator i = prod.begin();i != prod.end();i++){
@@ -311,91 +331,3 @@ public:
         return -1;
     }//判断产生式是否存在于集合当中,存在则返回关键字编号
 };
-
-
-int analysis_table(string LR_path,string token_path,string produce_path)
-{
-    ifstream f_token;
-    ifstream f_LR;
-    ofstream f_produce;
-    stack<SC> lr_stack;
-    SC cur;
-    char buf[1024];
-    char temp[1024];
-    int i,k,type_code,x,y,cur_state;
-    int end = 0;
-    int readline = 1;
-    f_LR.open(LR_path,ios::in);
-    f_token.open(token_path,ios::in);
-    f_produce.open(produce_path,ios::out);
-    ActTable ActTable;
-
-    //创建分析表
-    ActTable.create(f_LR);
-
-    //初始化分析栈
-    cur.state = 0;
-    cur.type_code = ActTable.code_of("$");
-    cur.lex_code = 0;
-
-    lr_stack.push(cur);
-
-    //开始归约
-    while(!end){
-        k = 0;
-        if(readline){
-            f_token.getline(buf,sizeof(buf));
-        }
-
-        //得到标识符的词法分析编号
-        for(i = 1;buf[i] != ',';i++){
-            temp[k++] = buf[i];
-        }
-        temp[k] = '\0';
-        type_code = ActTable.code_transfer(atoi(temp));
-
-        //状态转移
-        cur_state = lr_stack.top().state;
-        switch(ActTable.next_action(cur_state , type_code)){
-            case('r'):{
-                for(i = 0;i < ActTable.pro_right_len(cur_state , type_code);i++){
-                    lr_stack.pop();
-                }
-                cur.type_code = ActTable.pro_left_code(cur_state , type_code);
-                cur.lex_code = -1;
-                cur.state = ActTable.next_state(lr_stack.top().state,cur.type_code);
-                lr_stack.push(cur);
-
-                //规约一条语句并输出到文件中
-                ActTable.write_produce(f_produce,cur_state,type_code);
-
-                //本次处理后不读入新行
-                readline = 0;
-                break;
-            }
-            case('s'):{
-                cur.state = ActTable.next_state(cur_state , type_code);
-                cur.type_code = type_code;
-                cur.lex_code = atoi(temp);
-                lr_stack.push(cur);
-                readline = 1;
-                break;
-            }
-            case('a'):{
-                f_produce << "Accept!" << endl;
-                end = 1;
-                break;
-            }
-            default:{
-                f_produce << "Error!" << endl;
-                end = 1;
-                break;
-            }
-        }
-    }
-
-    f_token.close();
-    f_produce.close();
-    f_LR.close();
-    return 0;
-}

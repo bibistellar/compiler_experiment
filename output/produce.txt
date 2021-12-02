@@ -1,23 +1,35 @@
 TYPE -> KEY_INT
+FUNC_START -> TYPE ID ( ) {
 TYPE -> KEY_INT
 DEF_VALUE -> TYPE ID
-S -> DEF_VALUE
+DEF_V -> DEF_VALUE
+S -> DEF_V
+TYPE -> KEY_INT
+DEF_VALUE -> TYPE ID
+DEF_V -> DEF_VALUE
+S -> DEF_V
+TYPE -> KEY_INT
+DEF_VALUE -> TYPE ID
+DEF_V -> DEF_VALUE
+S -> DEF_V
 VAL_LOC -> VALUE_INT
 B -> VAL_LOC
 A -> B
-OP_HIGH -> *
+Exp -> A
+S -> ID = Exp
 VAL_LOC -> VALUE_INT
 B -> VAL_LOC
-A -> A OP_HIGH B
+A -> B
 Exp -> A
 OP_LOW -> +
 VAL_LOC -> VALUE_INT
 B -> VAL_LOC
 A -> B
-OP_HIGH -> *
+Exp -> Exp OP_LOW A
+OP_LOW -> +
 VAL_LOC -> VALUE_INT
 B -> VAL_LOC
-A -> A OP_HIGH B
+A -> B
 Exp -> Exp OP_LOW A
 S -> ID = Exp
 B -> ID
@@ -29,24 +41,42 @@ B -> VAL_LOC
 A -> B
 Exp -> Exp OP_LOW A
 S -> ID = Exp
+VAL_LOC -> VALUE_INT
+B -> VAL_LOC
+A -> B
+Exp -> A
+OP_LOW -> -
+VAL_LOC -> VALUE_INT
+B -> VAL_LOC
+A -> B
+Exp -> Exp OP_LOW A
+S -> ID = Exp
 B -> ID
 A -> B
-OP_HIGH -> /
+OP_HIGH -> *
 VAL_LOC -> VALUE_INT
 B -> VAL_LOC
 A -> A OP_HIGH B
 Exp -> A
 S -> ID = Exp
-VAL_LOC -> VALUE_INT
-B -> VAL_LOC
+B -> ID
 A -> B
 OP_HIGH -> /
-B -> ID
+VAL_LOC -> VALUE_INT
+B -> VAL_LOC
 A -> A OP_HIGH B
 Exp -> A
 OP_LOW -> +
 VAL_LOC -> VALUE_INT
 B -> VAL_LOC
+A -> B
+Exp -> A
+OP_LOW -> +
+VAL_LOC -> VALUE_INT
+B -> VAL_LOC
+A -> B
+Exp -> Exp OP_LOW A
+B -> ( Exp )
 A -> B
 Exp -> Exp OP_LOW A
 S -> ID = Exp
@@ -59,6 +89,10 @@ MS -> S #END MS
 MS -> S #END MS
 MS -> S #END MS
 MS -> S #END MS
-DEF_FUNC -> TYPE ID ( ) { MS }
+MS -> S #END MS
+MS -> S #END MS
+MS -> S #END MS
+MS -> S #END MS
+DEF_FUNC -> FUNC_START MS }
 P -> DEF_FUNC
 Accept!

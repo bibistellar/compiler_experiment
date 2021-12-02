@@ -1,8 +1,12 @@
-int function(){
-	int result;
-	f = 2*10+2*4;
-	c = f-2;
-	d = c/10;
-	a = 10/d+3;
+int main(){
+	int hello;
+	int temp;
+	int A;
+	temp = 4;
+	A = 5+5+5;
+	A = A - 5;
+	hello = 11 - 6;
+	temp = A*3;
+	hello = temp/3+(5+4);
 	return 0;
 }

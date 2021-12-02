@@ -13,6 +13,8 @@
 #define key_word_num 12
 #define MAX_NAME_LENGTH 1024
 
+using namespace std;
+
 //词法分析器编码
 enum WORD_CODE{
     ID = 1,
@@ -68,6 +70,22 @@ enum WORD_ATTR{
     UNKNOWN,
     BLANK
 }word_attr;
+
+string token_path = "output/token.txt";
+string input_path = "input_code.txt";
+string symbol_table_path = "output/symbol_table.txt";
+string LR_path = "LR1.csv";
+string produce_path = "output/produce.txt";
+string three_address_code_path = "output/three_address_code.txt";
+string asm_path = "output/asm_code.txt";
+
+fstream f_input;
+fstream f_token;
+fstream f_LR;
+fstream f_produce;
+fstream f_symbol_table;
+fstream f_three_address_code;
+fstream f_asm;
 
 #endif
 
